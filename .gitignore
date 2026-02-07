@@ -1,0 +1,16 @@
+# Virtual environment
+bin/
+lib/
+lib64
+include/
+pyvenv.cfg
+
+# Environment variables (YOUR BOT TOKEN WILL GO HERE)
+.env
+config.py
+*.env
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
