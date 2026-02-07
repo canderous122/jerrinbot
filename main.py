@@ -4,6 +4,10 @@ import os
 from dotenv import load_dotenv
 import random
 from jerrin_random_phrases import *
+from flask import Flask
+from threading import Thread
+
+
 # load the token from .env file
 load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
@@ -13,6 +17,17 @@ intents = discord.Intents.default()
 intents.message_content = True # Needed to read message content
 
 bot = commands.Bot(command_prefix="!", intents=intents)
+
+# flask app for health checks
+app = Flask(__name__)
+
+@app.route('/')
+def home():
+    return "Bot is running!"
+
+
+def run_flask():
+    app.run(host='0.0.0.0', port=int(os.environ.get('PORT', 8080)))
 
 # Event: bot is ready
 @bot.event
@@ -39,6 +54,10 @@ async def on_message(message):
 
     # this line is important, it allows commands to still work
     await bot.process_commands(message)
+
+
+# Run Flask in a separate thread
+Thread(target=run_flask).start()
 
 # run the bot
 bot.run(TOKEN)
