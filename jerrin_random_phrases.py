@@ -12,7 +12,7 @@ jerrin_phrases = [
     "Chicken on the corn",
     "Priti priti prato, prato pruto prito, priti priti prato pra-taoooooooooo",
     "Any Marvel gooners in here?",
-    "My surname is not Paul",
-    "WHERES MY FUCKING FANTA",
-    "Guys I totally didnt burn down that Burger King"
+    "My surname is not Paul.",
+    "WHERES MY FUCKING FANTA!",
+    "Guys I totally didnt burn down that Burger King!"
 ]

@@ -29,7 +29,12 @@ async def on_message(message):
     
     #check if bot was mentioned
     if bot.user in message.mentions:
-        await message.reply(random.choice(jerrin_phrases))
+        if message.author.id == 210459434416209920:
+            await message.reply("Look at this loser he's swapped to the same hero as me!")
+        elif "marvel rivals" in message.content.lower():
+            await message.reply("Im literally top fragging, are you watching the stream?")
+        else:
+            await message.reply(random.choice(jerrin_phrases))
 
 
     # this line is important, it allows commands to still work
