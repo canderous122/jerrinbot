@@ -1,12 +1,12 @@
 import discord
-from discord.ext import commands
+from discord.ext import commands, tasks
 import os
 from dotenv import load_dotenv
 import random
 from jerrin_random_phrases import *
 from flask import Flask
 from threading import Thread
-
+from presence_tracker import *
 
 # load the token from .env file
 load_dotenv()
@@ -15,6 +15,9 @@ TOKEN = os.getenv('DISCORD_TOKEN')
 # Create bot instance with intents
 intents = discord.Intents.default()
 intents.message_content = True # Needed to read message content
+intents.presences = True # Needed to see rich presence
+intents.members = True
+
 
 bot = commands.Bot(command_prefix="!", intents=intents)
 
@@ -33,6 +36,7 @@ def run_flask():
 @bot.event
 async def on_ready():
     print(f'{bot.user} has connected to Discord!')
+    good_morning.start() #start the task
 
 
 # Event: When a message is sent
@@ -54,6 +58,34 @@ async def on_message(message):
 
     # this line is important, it allows commands to still work
     await bot.process_commands(message)
+
+@bot.event
+async def on_presence_update(before, after):
+    await check_marvel_rivals(bot, before, after, 493833240562368522)
+
+
+
+# Good Morning message
+@tasks.loop(hours=24)
+async def good_morning():
+    channel = bot.get_channel(493833240562368522)
+    if channel:
+        await channel.send("Good morning you benchods!")
+
+
+@good_morning.before_loop
+async def before_good_morning():
+    await bot.wait_until_ready()
+    # calculatime time until next 9 am gmt
+    import datetime
+    now = datetime.datetime.utcnow()
+    target  = now.replace(hour=9, minute=0, second=0, microsecond=0)
+    if now.hour >= 9:
+        target += datetime.timedelta(days=1)
+    await discord.utils.sleep_until(target)
+
+
+
 
 
 # Run Flask in a separate thread
