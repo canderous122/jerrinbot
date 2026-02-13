@@ -36,8 +36,7 @@ def run_flask():
 @bot.event
 async def on_ready():
     print(f'{bot.user} has connected to Discord!')
-    good_morning.start() #start the task
-
+    good_morning.start()
 
 # Event: When a message is sent
 @bot.event
@@ -65,25 +64,22 @@ async def on_presence_update(before, after):
 
 
 
-# Good Morning message
-@tasks.loop(hours=24)
+import datetime
+
+# Define the time
+utc = datetime.timezone.utc
+morning_time = datetime.time(hour=9, minute=0, tzinfo=utc)
+
+# Task with specific time
+@tasks.loop(time=morning_time)
 async def good_morning():
     channel = bot.get_channel(493833240562368522)
     if channel:
         await channel.send("Good morning you benchods!")
 
-
 @good_morning.before_loop
 async def before_good_morning():
     await bot.wait_until_ready()
-    # calculatime time until next 9 am gmt
-    import datetime
-    now = datetime.datetime.utcnow()
-    target  = now.replace(hour=9, minute=0, second=0, microsecond=0)
-    if now.hour >= 9:
-        target += datetime.timedelta(days=1)
-    await discord.utils.sleep_until(target)
-
 
 
 
