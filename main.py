@@ -7,6 +7,7 @@ from jerrin_random_phrases import *
 from flask import Flask
 from threading import Thread
 from presence_tracker import *
+from jerrin_imposter_phrases import *
 
 # load the token from .env file
 load_dotenv()
@@ -48,7 +49,7 @@ async def on_message(message):
     #check if bot was mentioned
     if bot.user in message.mentions:
         if message.author.id == 210459434416209920:
-            await message.reply("Look at this loser he's swapped to the same hero as me!")
+            await message.reply(random.choice(imposter_phrases))
         elif "marvel rivals" in message.content.lower():
             await message.reply("Im literally top fragging, are you watching the stream?")
         else:
